@@ -37,9 +37,10 @@
           <img src="./images/logo.png" alt />
         </router-link>
       </div>
-      <form action="#" method="POST">
-        <input type="text" name="searchName" />
-        <button type="submit" @click="search">搜索</button>
+      <form @click.prevent="search" >
+        <input type="text" v-model="searchText" />
+        <!-- button 默认的type就是submit -->
+        <button type="submit" >搜索</button>
       </form>
     </div>
   </div>
@@ -48,10 +49,49 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      searchText: ""
+    };
+  },
   methods: {
+      /**
+       * 搜索功能函数
+       */
+      /* $router.push(location)
+          location 可以是字符串 path/:xxx?key=value
+          location 可以是对象 
+            {
+              path: 路由路径,
+              query: {} 查询字符串参数
+            }
+
+            {
+              name: 命名路由名称,
+              params: {} params参数
+              query: {} 查询字符串参数
+            }
+              命名路由params可选 */
+    /* 字符串处理可选参数
     search() {
-        // 编程式导航：因为还要做搜素功能（要发送请求）
-      this.$router.push("/search");
+      const { searchText } = this;
+      const params = searchText ? `/${searchText}` : "";
+      const location = "/search" + params;
+      // 编程式导航：因为还要做搜素功能（要发送请求）
+      this.$router.push(location);
+    } */
+    // 对象处理可选参数
+    search() {
+        const{searchText} = this;
+        const location = {
+            name:"Search",
+        };
+        if(searchText) {
+            location.params = {
+                searchText,
+            }
+        }
+        this.$router.push(location);
     }
   }
 };
