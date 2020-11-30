@@ -1,5 +1,5 @@
 <template>
-<div>
+  <div>
     <TypeNav />
     <!-- 列表导航 -->
     <ListContainer />
@@ -15,33 +15,45 @@
     <Floor />
     <!-- 商标 -->
     <Brand />
-</div>
+  </div>
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+
 import TypeNav from "../../components/TypeNav/index";
 import ListContainer from "./ListContainer/ListContainer";
 import TodayRecommend from "./TodayRecommend/TodayRecommend";
 import Rank from "./Rank/Rank";
 import Like from "./Like/Like";
 import Floor from "./Floor/Floor";
-import Brand from "./Brand/Brand"
+import Brand from "./Brand/Brand";
 
 export default {
   name: "Home",
-  components:{
-      TypeNav,
-      ListContainer,
-      TodayRecommend,
-      Rank,
-      Like,
-      Floor,
-      Brand
-  }
-
+  computed: {
+    ...mapState({
+      floors: state => state.home.floors
+    })
+  },
+  methods: {
+    ...mapActions(["getFloors"])
+  },
+  mounted() {
+    this.getFloors();
+  },
+  components: {
+    TypeNav,
+    ListContainer,
+    TodayRecommend,
+    Rank,
+    Like,
+    Floor,
+    Brand
+  },
+  
 };
 </script>
 
 <style lang="less" scoped>
-
 </style>

@@ -15,8 +15,7 @@ import { Message } from 'element-ui';
 
 const instance = axios.create({
     // 公共地址
-    //  / 就是当前服务器地址
-    baseURL: "/api"
+    baseURL: "/mock" 
 })
 
 instance.interceptors.request.use(
