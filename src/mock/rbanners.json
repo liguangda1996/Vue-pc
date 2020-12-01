@@ -1,6 +1,6 @@
 [
     {
         "id|+1": 1,
-        "IMGrl": "@image('720x455', '@color')"
+        "imgUrl": "@image('730x455', '@color')"
     }
 ]
