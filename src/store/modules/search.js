@@ -18,6 +18,9 @@ export default {
         },
         goodsList(state) {
             return state.productList.goodsList;
+        },
+        total(state) {
+            return state.productList.total;
         }
     },
     actions: {

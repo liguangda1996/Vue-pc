@@ -5,6 +5,7 @@ import router from "./router"
 import store from "./store"
 // 引入公共资源
 import "./styles/reset.css"
+import "./styles/iconfont.css"
 // 引入element-ui
 import './plugins/element.js'
 // 引入mockSever
@@ -14,6 +15,9 @@ import "./mock/mockSever"
 Vue.config.productionTip = false;
 
 new Vue({
+    beforeCreate() {
+        Vue.prototype.$bus = this;
+    },
     render: h => h(App),
     // 应用router
     router,

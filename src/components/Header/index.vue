@@ -37,7 +37,7 @@
           <img src="./images/logo.png" alt />
         </router-link>
       </div>
-      <form @click.prevent="search" >
+      <form @submit.prevent="search" >
         <input type="text" v-model="searchText" />
         <!-- button 默认的type就是submit -->
         <button type="submit" >搜索</button>
@@ -51,7 +51,7 @@ export default {
   name: "Header",
   data() {
     return {
-      searchText: ""
+      searchText: "",     
     };
   },
   methods: {
@@ -92,7 +92,12 @@ export default {
             }
         }
         this.$router.push(location);
-    }
+    },
+  },
+  mounted() {
+      this.$bus.$on("clearKeyword",() => {
+          this.searchText = '';
+      })
   }
 };
 </script>

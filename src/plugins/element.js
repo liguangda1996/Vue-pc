@@ -1,4 +1,5 @@
 import Vue from 'vue'
-import { Button,  Carousel, CarouselItem } from 'element-ui'
+import { Button, Pagination } from 'element-ui'
 
-Vue.use(Button,  Carousel, CarouselItem)
+Vue.use(Button);
+Vue.use(Pagination);
