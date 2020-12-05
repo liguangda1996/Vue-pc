@@ -4,7 +4,8 @@ import VueRouter from "vue-router";
 import Home from "../views/Home";
 import Login from "../views/Login";
 import Register from "../views/Register";
-import Search from "../views/Search"
+import Search from "../views/Search";
+import Detail from "@views/Detail"
 
 // 重写push和replace方法
 // 目的：为了让编程式导航重复点击时不报错~
@@ -59,6 +60,11 @@ export default new VueRouter({
             // ? 表示params 参数是可选的
             path: "/search/:searchText?",
             component: Search,
+        },
+        {
+            naem: "Detail",
+            path: "/detail/:id",
+            component: Detail,
         }
     ]
 })

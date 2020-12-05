@@ -14,7 +14,6 @@ export default {
       login(){
           reqLogin("13700000000","1111111")
           .then((res) => {
-         
               console.log("res",res)
           })
           .catch((error)=>{

@@ -63,7 +63,7 @@ export default {
 
       // 确保：swiper不能new多次
       if (this.swiper) return;
-      this.$nextTick(() => {
+      this.$nextTick(() => {         
           this.initSwiper()
       });
     }

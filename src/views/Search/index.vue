@@ -44,7 +44,7 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li :class="{ active: options.order.indexOf('1') > -1 }" @click="setOrder('1')">
+                <li :class="{ active: isOrderNum('1') }" @click="setOrder('1')">
                   <a>
                     综合
                     <i
@@ -62,16 +62,16 @@
                 <li>
                   <a href="#">评价</a>
                 </li>
-                <li :class="{ active: options.order.indexOf('2') > -1 }" @click="setOrder('2')">
+                <li :class="{ active: isOrderNum('2') }" @click="setOrder('2')">
                   <a>
                     价格
                     <span>
                       <i
-                        :class="{iconfont:true, 'icon-arrow-up-filling':true, deactive:options.order.indexOf('2') > -1 && isPriceDown}"
+                        :class="{iconfont:true, 'icon-arrow-up-filling':true, deactive:isOrderNum('2')  && isPriceDown}"
                       ></i>
 
                       <i
-                        :class="{iconfont:true, 'icon-arrow-down-filling': true, deactive:options.order.indexOf('2') > -1 && !isPriceDown }"
+                        :class="{iconfont:true, 'icon-arrow-down-filling': true, deactive:isOrderNum('2')  && !isPriceDown }"
                       ></i>
                     </span>
                   </a>
@@ -85,9 +85,9 @@
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank">
+                    <router-link :to="`/detail/${goods.id}`"  target="_blank">
                       <img :src="goods.defaultImg" />
-                    </a>
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -96,11 +96,10 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
+                    <router-link :to="`/detail/${goods.id}`"
                       target="_blank"
-                      href="item.html"
                       title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                    >{{goods.title}}</a>
+                    >{{goods.title}}</router-link>
                   </div>
                   <div class="commit">
                     <i class="command">
@@ -122,7 +121,14 @@
           </div>
 
           <!-- 分页器 -->
-          <el-pagination
+          <Pagination
+            :current-page="options.pageNo"
+            :pager-count="7"
+            :page-size="5"
+            :total="total"
+            @current-change="handleCurrentChange"
+          />
+          <!--  <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="options.pageNo"
@@ -131,7 +137,7 @@
             background
             layout=" prev, pager, next, sizes, total, jumper"
             :total="total"
-          ></el-pagination>
+          ></el-pagination>-->
         </div>
       </div>
     </div>
@@ -142,6 +148,7 @@
 import { mapGetters, mapActions } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 import TypeNav from "@comps/TypeNav";
+import Pagination from "@comps/Pagination";
 
 export default {
   name: "Search",
@@ -170,11 +177,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["goodsList","total"])
+    ...mapGetters(["goodsList", "total"])
   },
   methods: {
     ...mapActions(["getProductList"]),
-    // 更新商品列表
+    // 更新商品列表   pageNo = 1 是让给更新商品列表一个初始页面
     updateProductList(pageNo = 1) {
       // 解构赋值提取params 中的 searchText 属性，并将其重新命名为keyword
       const { searchText: keyword } = this.$route.params; // 得到初始搜索地址的 搜索框数据
@@ -196,7 +203,7 @@ export default {
       };
       // 将新的options 更新上
       this.options = options;
-      this.getProductList(options);
+      this.getProductList(options); // 携带新的options重新发送请求，更新页面数据
     },
     // 删除搜索内容标签
     delKeyword() {
@@ -223,6 +230,8 @@ export default {
     },
     // 添加品牌并更新数据
     addTrademark(trademark) {
+      // 判断品牌是否已经添加
+      if (this.options.trademark) return;
       this.options.trademark = trademark;
       this.updateProductList();
     },
@@ -233,11 +242,14 @@ export default {
     },
     // 添加商品属性并更新数据
     addProps(prop) {
+      // 判断属性是否已经添加
+      if (this.options.props.indexOf(prop) > -1) return;
       this.options.props.push(prop);
       this.updateProductList();
     },
     // 删除商品属性并更新数据
     delProp(index) {
+      // 删除下标为index的元素
       this.options.props.splice(index, 1);
       this.updateProductList();
     },
@@ -280,7 +292,11 @@ export default {
     },
     // 当页码发生变化触发
     handleCurrentChange(pageNo) {
+      // this.options.pageNo = pageNo;
       this.updateProductList(pageNo);
+    },
+    isOrderNum(order) {
+      return this.options.order.indexOf(order) > -1;
     }
   },
   mounted() {
@@ -288,7 +304,8 @@ export default {
   },
   components: {
     SearchSelector,
-    TypeNav
+    TypeNav,
+    Pagination
   }
 };
 </script>
