@@ -16,9 +16,13 @@
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <Zoom :skuInfo="skuInfo"/>
+          <Zoom
+            :skuInfo="skuInfo"
+            :imgUrl="skuInfo.skuImageList &&skuInfo.skuImageList[currentImage] && skuInfo.skuImageList[currentImage].imgUrl"
+            :bigImgUrl="skuInfo.skuImageList &&skuInfo.skuImageList[currentImage] && skuInfo.skuImageList[currentImage].imgUrl"
+          />
           <!-- 小图列表 -->
-          <ImageList :skuInfo="skuInfo"/>
+          <ImageList :skuImageList="skuInfo.skuImageList" :updateCurrentImage="updateCurrentImage" />
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
@@ -77,11 +81,19 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
+                <!-- <input autocomplete="off" class="itxt"  />
                 <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <a href="javascript:" class="mins">-</a>-->
+                <el-input-number
+                  class="el-num"
+                  v-model="skuNum"
+                  controls-position="right"
+                  @change="handleChange"
+                  :min="1"
+                  :max="10"
+                ></el-input-number>
               </div>
-              <div class="add">
+              <div class="add" @click="addCart">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -121,7 +133,7 @@
                     <i>6088.00</i>
                   </div>
                   <div class="operate">
-                    <a href="javascript:void(0);">加入购物车</a>
+                    <router-link to="/addcartsuccess">加入购物车</router-link>
                   </div>
                 </div>
               </li>
@@ -329,11 +341,36 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Detail",
+  data() {
+    return {
+      currentImage: 0,
+      skuNum: 1
+    };
+  },
   computed: {
     ...mapGetters(["categoryView", "spuSaleAttrList", "skuInfo"])
   },
   methods: {
-    ...mapActions(["getProductDetail"])
+    ...mapActions(["getProductDetail", "updateCartCount"]),
+    // 更新选中图片的下标
+    updateCurrentImage(index) {
+      this.currentImage = index;
+    },
+    // 加入购物车
+    async addCart() {
+      try {
+        // 发送请求，商品加入购物车
+        await this.updateCartCount({
+          skuId: this.skuInfo.id,
+          skuNum: this.skuNum
+        });
+        window.sessionStorage.setItem("addCartSuccessInfo",JSON.stringify(this.skuInfo))
+        // 加入购物车成功， 跳转到购物车添加成功页面
+        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
+      } catch (e) {
+        console.log(e);
+      }
+    }
   },
   mounted() {
     this.getProductDetail(this.$route.params.id);
@@ -514,7 +551,9 @@ export default {
               position: relative;
               float: left;
               margin-right: 15px;
-
+              .el-num {
+                width: 80px;
+              }
               .itxt {
                 width: 38px;
                 height: 37px;
@@ -551,7 +590,7 @@ export default {
 
             .add {
               float: left;
-
+              margin-left: 30px;
               a {
                 background-color: #e1251b;
                 padding: 0 25px;

@@ -12,6 +12,9 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css"
 
 import { Message } from 'element-ui';
+import getUserTempId from "./getuserTempId"
+
+const userTempId = getUserTempId(); // 一上来只执行一次
 
 const instance = axios.create({
     // 公共地址
@@ -23,6 +26,9 @@ instance.interceptors.request.use(
     (config) => {
         // 开启进度条
         NProgress.start();
+
+        config.headers.userTempId = userTempId;
+
         return config
     }
 )

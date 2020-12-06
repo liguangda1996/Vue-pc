@@ -70,7 +70,7 @@ export default {
     },
     // 每次点击页面时，重新加载页面
     myCurrentPage(currentPage) {
-      //this.$listeners.currentPage(currentPage)
+      //this.$listeners["current-change"](currentPage)
       this.$emit("current-change", currentPage);
     }
   },

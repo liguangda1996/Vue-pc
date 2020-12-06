@@ -1,8 +1,8 @@
 <template>
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide" v-for="skuImage in skuInfo.skuImageList" :key="skuImage.id">
-        <img :src="skuImage.imgUrl" />
+  <div class="swiper-container" ref="swiper">
+    <div class="swiper-wrapper" >
+      <div class="swiper-slide" v-for="(skuImage, index) in skuImageList" :key="skuImage.id">
+        <img :src="skuImage.imgUrl" @click="updateCurrentImage(index)"/>
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -12,46 +12,43 @@
 
 <script>
 // import Swiper from "swiper";
-import Swiper, { Navigation, Pagination } from "swiper";
-import "swiper/swiper-bundle.css";
+import Swiper, { Navigation} from "swiper";
+
 // https://swiperjs.com/get-started/
 // Swiper6默认只有核心轮播图功能，其他功能没有
 // 要使用其他功能，需要先加载
-Swiper.use([Navigation, Pagination]);
+Swiper.use([Navigation]);
 
 export default {
   name: "ImageList",
   props: {
-    skuInfo: Object
+    skuImageList: Array,
+    updateCurrentImage: Function,
   },
   watch: {
-    //   skuInfo 是父组件传过来的，因为会先执行子组件的挂载，所以一上来skuInfo是没有数据的，所以 new Swiper 要放在watch中
-    skuInfo() {
+    //   skuImageList 是父组件传过来的，因为会先执行子组件的挂载，所以一上来skuImageList是没有数据的，所以 new Swiper 要放在watch中
+    skuImageList() {
       if (this.swiper) return;
       this.$nextTick(() => {
-        this.initSwiper();
-      });  
-    }
-  },
-  methods: {
-    initSwiper() {
-      this.swiper = new Swiper(".swiper-container", {
-        slidesPerView: 5,
-        spaceBetween: 30,
-        slidesPerGroup: 5,
-        loop: true,
-        loopFillGroupWithBlank: true,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        }
+        new Swiper( this.$refs.swiper , {
+          slidesPerView: 5,
+          spaceBetween: 30,
+          slidesPerGroup: 5,
+          loop: true,
+          loopFillGroupWithBlank: true,
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true
+          },
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+          }
+        });
       });
     }
-  },
+  }
+
   /* mounted() {
     this.initSwiper();
   } */

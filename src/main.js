@@ -4,8 +4,9 @@ import App from "./App.vue";
 import router from "./router"
 import store from "./store"
 // 引入公共资源
-import "./styles/reset.css"
-import "./styles/iconfont.css"
+import "./styles/reset.css" // 样式重置
+import "./styles/iconfont.css" // 字体图标样式
+import "swiper/swiper-bundle.css"; // swiper样式
 // 引入element-ui
 import './plugins/element.js'
 // 引入mockSever

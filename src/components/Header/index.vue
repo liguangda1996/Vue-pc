@@ -14,7 +14,7 @@
           <a href="###">我的订单</a>
         </li>
         <li>
-          <a href="###">我的购物车</a>
+          <router-link to="/shopcart">我的购物车</router-link>
         </li>
         <li>
           <a href="###">我的会员</a>

@@ -17,7 +17,6 @@
 
 <script>
 import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
-import "swiper/swiper-bundle.css";
 // https://swiperjs.com/get-started/
 // Swiper6默认只有核心轮播图功能，其他功能没有
 // 要使用其他功能，需要先加载
