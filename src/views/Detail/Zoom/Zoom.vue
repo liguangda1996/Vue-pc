@@ -1,11 +1,14 @@
 <template>
   <div class="spec-preview">
+      <!-- 中图 -->
     <img  :src="imgUrl" />
-    <div class="event"></div>
+    <div class="event" @mousemove="handleMove" ref="event"></div>
+    <!-- 大图 -->
     <div class="big">
-      <img :src="bigImgUrl" />
+      <img :src="bigImgUrl" ref="bigImg"/>
     </div>
-    <div class="mask"></div>
+    <!-- 蒙版 -->
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
@@ -16,6 +19,49 @@
         skuInfo:Object,
         imgUrl:String,
         bigImgUrl:String
+    },
+    data() {
+        return {
+            maskWidth:0
+        }
+    },
+    methods:{
+        handleMove(event) {
+            const { offsetX, offsetY } = event;
+            //console.log(offsetX, offsetY);
+
+            const maskWidth = this.maskWidth;
+            let left = 0;
+            let top = 0;
+            // mask 移动距离
+            left = offsetX - maskWidth/2;
+            top = offsetY - maskWidth/2;
+            // left 的移动范围
+            if(left < 0) {
+                left = 0;
+            }else if( left > maskWidth ) {
+                left = maskWidth;
+            }
+
+            if(top < 0) {
+                top = 0
+            } else if( top > maskWidth) {
+                top =maskWidth;
+            }
+            // mask 的移动
+            const maskMove = this.$refs.mask;
+            maskMove.style.left = left + "px";
+            maskMove.style.top = top + "px";
+            // 大图 的移动
+            const bigImgMove = this.$refs.bigImg;
+            bigImgMove.style.left = -2*left + "px";
+            bigImgMove.style.top = -2*top + "px";
+        }
+    },
+    mounted() {
+        // 获取mask的宽度，因为mask的宽是固定值，不变，所以没有必要定义在data中
+        this.maskWidth = this.$refs.event.clientWidth/2;// mask 为 event的一半
+        //console.log(this.maskWidth);
     }
   }
 </script>

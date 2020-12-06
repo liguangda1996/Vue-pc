@@ -66,6 +66,7 @@
             </div>
           </div>
 
+          <!-- 选择区域 -->
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
@@ -73,9 +74,10 @@
                 <dt class="title">{{spuSaleAttr.saleAttrName}}</dt>
                 <dd
                   changepirce="0"
-                  class="active"
                   v-for="spuSaleAttrValue in spuSaleAttr.spuSaleAttrValueList"
                   :key="spuSaleAttrValue.id"
+                  :class="{active: spuSaleAttrValue.isChecked ==='1'}"
+                  @click="handleSelect(spuSaleAttrValue,spuSaleAttr.spuSaleAttrValueList)"
                 >{{spuSaleAttrValue.saleAttrValueName}}</dd>
               </dl>
             </div>
@@ -343,8 +345,8 @@ export default {
   name: "Detail",
   data() {
     return {
-      currentImage: 0,
-      skuNum: 1
+      currentImage: 0, // 当前图片的下标
+      skuNum: 1 // 商品数量
     };
   },
   computed: {
@@ -364,11 +366,24 @@ export default {
           skuId: this.skuInfo.id,
           skuNum: this.skuNum
         });
-        window.sessionStorage.setItem("addCartSuccessInfo",JSON.stringify(this.skuInfo))
+        window.sessionStorage.setItem(
+          "addCartSuccessInfo",
+          JSON.stringify(this.skuInfo)
+        );
         // 加入购物车成功， 跳转到购物车添加成功页面
         this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
       } catch (e) {
         console.log(e);
+      }
+    },
+    // 处理选择区域标签选择
+    handleSelect(spuSaleAttrValue, spuSaleAttrValueList) {
+      // 如果当前选择的没有选中
+      if (spuSaleAttrValue.isChecked !== 1) {
+        // 先让所有的都不选中
+        spuSaleAttrValueList.forEach(item => (item.isChecked = "0"));
+        // 在选中当前的
+        spuSaleAttrValue.isChecked = "1";
       }
     }
   },
@@ -520,7 +535,6 @@ export default {
             dl {
               overflow: hidden;
               margin: 13px 0;
-
               dt {
                 margin-right: 15px;
                 float: left;
@@ -538,8 +552,8 @@ export default {
                 border-left: 1px solid #eee;
 
                 &.active {
-                  color: green;
-                  border: 1px solid green;
+                  color: #c81623;
+                  border: 1px solid #c81623;
                 }
               }
             }
@@ -553,7 +567,12 @@ export default {
               margin-right: 15px;
               .el-num {
                 width: 80px;
+                .el-input-number__decrease,
+                .el-input-number__increase {
+                  width: 30px;
+                }
               }
+
               .itxt {
                 width: 38px;
                 height: 37px;
