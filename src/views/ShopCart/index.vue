@@ -28,9 +28,27 @@
             <span class="price">{{cart.skuPrice}}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" @click="updateCount(cart.skuId, -1)" class="mins">-</a>
-            <input autocomplete="off" type="text" :value="cart.skuNum" minnum="1" class="itxt" />
-            <a href="javascript:void(0)" @click="updateCount(cart.skuId,1)" class="plus">+</a>
+            <button
+              href="javascript:void(0)"
+              @click="updateCount(cart.skuId, -1)"
+              class="mins"
+              :disabled="cart.skuNum === 1"
+            >-</button>
+            <input
+              autocomplete="off"
+              type="text"
+              :value="cart.skuNum"
+              minnum="1"
+              class="itxt"
+              @blur="update(cart.skuId, cart.skuNum, $event)"
+              @input="formatSkuNum"
+            />
+            <button
+              href="javascript:void(0)"
+              @click="updateCount(cart.skuId,1)"
+              class="plus"
+              :disabled="cart.skuNum === 10"
+            >+</button>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{cart.skuPrice * cart.skuNum}}</span>
@@ -63,7 +81,7 @@
           <i class="summoney">{{totalParice}}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <router-link to="/trade" class="sum-btn" target="_blank">结算</router-link>
         </div>
       </div>
     </div>
@@ -131,10 +149,35 @@ export default {
       "updateCartCheck",
       "isAllCheck"
     ]),
+    // 商品数量添加减少处理
+     formatSkuNum(e) {
+      //console.log(e.target.value)
+      let skuNum = +e.target.value.replace(/\D/g, "");
+       if (skuNum <= 0) {
+        alert("商品必须大于0") 
+        skuNum = 1;
+      } else if (skuNum > 20) {
+        // 10就是假设的库存量
+        skuNum = 10;
+      }
+      e.target.value = skuNum; 
+    }, 
+    // 处理商品数量直接输入数字
+   update(skuId, skuNum, e) {
+       //console.log(skuId, skuNum, e.target.value); e.target.value 得到的值为字符串
+       // 如果输入的值和原本的值相等就不处理
+       if( +e.target.value === skuNum) {
+           return;
+       }
+       // 当前商品数量是10 e.target.value 6 -->  6 - 10 = -4
+       // 当前商品数量是3 e.target.value 6 --> 6 - 3 = 3
+       this.updateCartCount({skuId, skuNum: e.target.value - skuNum})
+       
+   },
     // 更新商品数量
     async updateCount(skuId, skuNum) {
       // 更新商品
-      await this.updateCartCount({ skuId, skuNum });
+      await this.updateCartCount({ skuId, skuNum});
       // 刷新页面
       //this.getShopCartList(); // 2. 重新请求所有购物车数据(改变商品数量之后，更新页面方式二)
     },

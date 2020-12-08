@@ -90,7 +90,6 @@
                   class="el-num"
                   v-model="skuNum"
                   controls-position="right"
-                  @change="handleChange"
                   :min="1"
                   :max="10"
                 ></el-input-number>
@@ -567,8 +566,8 @@ export default {
               margin-right: 15px;
               .el-num {
                 width: 80px;
-                .el-input-number__decrease,
-                .el-input-number__increase {
+                /deep/ .el-input-number__decrease,
+                /deep/ .el-input-number__increase {
                   width: 30px;
                 }
               }

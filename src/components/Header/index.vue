@@ -2,12 +2,18 @@
   <div id="header">
     <div id="shortcut">
       <ul class="left">
-        <li>
-          <router-link to="/login" class="clear-border">您好,请登录</router-link>
-        </li>
-        <li>
-          <router-link to="/register">免费注册</router-link>
-        </li>
+        <div v-if="$store.state.user.name">
+          <span>{{$store.state.user.name}}</span>
+          <a @click="exitLogin">退出</a>
+        </div>
+        <div v-else>
+          <li>
+            <router-link to="/login" class="clear-border">您好,请登录</router-link>
+          </li>
+          <li>
+            <router-link to="/register">免费注册</router-link>
+          </li>
+        </div>
       </ul>
       <ul class="right">
         <li>
@@ -37,10 +43,10 @@
           <img src="./images/logo.png" alt />
         </router-link>
       </div>
-      <form @submit.prevent="search" >
+      <form @submit.prevent="search">
         <input type="text" v-model="searchText" />
         <!-- button 默认的type就是submit -->
-        <button type="submit" >搜索</button>
+        <button type="submit">搜索</button>
       </form>
     </div>
   </div>
@@ -51,14 +57,14 @@ export default {
   name: "Header",
   data() {
     return {
-      searchText: "",     
+      searchText: ""
     };
   },
   methods: {
-      /**
-       * 搜索功能函数
-       */
-      /* $router.push(location)
+    /**
+     * 搜索功能函数
+     */
+    /* $router.push(location)
           location 可以是字符串 path/:xxx?key=value
           location 可以是对象 
             {
@@ -82,22 +88,25 @@ export default {
     } */
     // 对象处理可选参数
     search() {
-        const{searchText} = this;
-        const location = {
-            name:"Search",
+      const { searchText } = this;
+      const location = {
+        name: "Search"
+      };
+      if (searchText) {
+        location.params = {
+          searchText
         };
-        if(searchText) {
-            location.params = {
-                searchText,
-            }
-        }
-        this.$router.push(location);
+      }
+      this.$router.push(location);
     },
+    exitLogin() {
+        this.$store.dispatch("exit")
+    }
   },
   mounted() {
-      this.$bus.$on("clearKeyword",() => {
-          this.searchText = '';
-      })
+    this.$bus.$on("clearKeyword", () => {
+      this.searchText = "";
+    });
   }
 };
 </script>
@@ -128,6 +137,9 @@ export default {
   float: left;
   list-style-type: none;
 }
+.left a:hover{
+    color: red;
+    }
 
 .left li {
   float: right;

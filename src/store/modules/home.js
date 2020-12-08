@@ -1,5 +1,5 @@
 // home组件的vuex状态
-import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors } from "@api/home";
+import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors, reqExit } from "@api/home";
 
 export default {
     state: {
@@ -25,6 +25,9 @@ export default {
         async getFloors({ commit }) {
             const floors = await reqGetFloors();
             commit("GET_FLOORS", floors)
+        },
+         exit() {
+             reqExit();
         }
     },
     getters: {},

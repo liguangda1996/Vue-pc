@@ -9,6 +9,7 @@
 import axios from "axios";
 // 引入进度条
 import NProgress from "nprogress";
+import store from "../store"
 import "nprogress/nprogress.css"
 
 import { Message } from 'element-ui';
@@ -26,6 +27,10 @@ instance.interceptors.request.use(
     (config) => {
         // 开启进度条
         NProgress.start();
+        const token = store.state.user.token;
+        if(token) {
+            config.headers.token = token;
+        }
 
         config.headers.userTempId = userTempId;
 
