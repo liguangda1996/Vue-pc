@@ -1,5 +1,5 @@
 // home组件的vuex状态
-import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors, reqExit } from "@api/home";
+import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors,  } from "@api/home";
 
 export default {
     state: {
@@ -26,9 +26,6 @@ export default {
             const floors = await reqGetFloors();
             commit("GET_FLOORS", floors)
         },
-         exit() {
-             reqExit();
-        }
     },
     getters: {},
     mutations: {
@@ -40,6 +37,6 @@ export default {
         },
         GET_FLOORS(state, floors) {
             state.floors = floors;
-        }
+        },
     }
 }

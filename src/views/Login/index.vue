@@ -116,7 +116,7 @@ export default {
         const { phone, password } = this.user;
         await this.$store.dispatch("login", { phone, password });
         // 登陆成功 就将token和name保存下来
-        if(this.isAutoLogin) { 
+        if(this.isLogin) { 
             localStorage.setItem("token",this.token);
             localStorage.setItem("name", this.name)
         }

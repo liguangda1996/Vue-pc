@@ -62,8 +62,8 @@ hr {
 html { overflow-y: scroll; }
 
 a:link:hover{
-    color : #e33333 !important;
-    text-decoration: underline;
+    color : #e33333 ;
+    text-decoration: underline; 
 }
 
 /* 清除浮动 */

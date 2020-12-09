@@ -614,10 +614,13 @@ export default {
                 padding: 0 25px;
                 font-size: 16px;
                 color: #fff;
-                height: 36px;
+                height: 40px;
                 line-height: 36px;
                 display: block;
               }
+              /* a:hover{
+                  color: #fff;
+              } */
             }
           }
         }

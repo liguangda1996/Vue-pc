@@ -17,7 +17,7 @@
       </ul>
       <ul class="right">
         <li>
-          <a href="###">我的订单</a>
+          <router-link to="/center">我的订单</router-link>
         </li>
         <li>
           <router-link to="/shopcart">我的购物车</router-link>

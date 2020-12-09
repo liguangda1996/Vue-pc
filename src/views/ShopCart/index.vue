@@ -47,7 +47,7 @@
               href="javascript:void(0)"
               @click="updateCount(cart.skuId,1)"
               class="plus"
-              :disabled="cart.skuNum === 10"
+              :disabled="cart.skuNum === 20"
             >+</button>
           </li>
           <li class="cart-list-con6">
@@ -150,34 +150,47 @@ export default {
       "isAllCheck"
     ]),
     // 商品数量添加减少处理
-     formatSkuNum(e) {
+    formatSkuNum(e) {
       //console.log(e.target.value)
       let skuNum = +e.target.value.replace(/\D/g, "");
-       if (skuNum <= 0) {
-        alert("商品必须大于0") 
-        skuNum = 1;
-      } else if (skuNum > 20) {
-        // 10就是假设的库存量
-        skuNum = 10;
-      }
-      e.target.value = skuNum; 
-    }, 
+      //    if (skuNum <= 0) {
+      //     alert("商品必须大于0")
+      //     skuNum = 1;
+      //   } else if (skuNum > 20) {
+      //     // 10就是假设的库存量
+      //     skuNum = 10;
+      //   }
+      e.target.value = skuNum;
+    },
     // 处理商品数量直接输入数字
-   update(skuId, skuNum, e) {
-       //console.log(skuId, skuNum, e.target.value); e.target.value 得到的值为字符串
-       // 如果输入的值和原本的值相等就不处理
-       if( +e.target.value === skuNum) {
-           return;
-       }
-       // 当前商品数量是10 e.target.value 6 -->  6 - 10 = -4
-       // 当前商品数量是3 e.target.value 6 --> 6 - 3 = 3
-       this.updateCartCount({skuId, skuNum: e.target.value - skuNum})
-       
-   },
+    update(skuId, skuNum, e) {
+        console.log(skuNum);
+        
+      if (e.target.value <= 0) {
+        alert("商品必须大于0");
+        // 如果输入的数量小于等于零  就让数量等于1； 1 - 当前商品数量，结果永远为负， 这样就是让当前的商品数量看减去多少，到1
+        this.updateCartCount({ skuId, skuNum: 1 - skuNum });
+        return;
+      } else if (e.target.value > 20) {
+        // 20就是假设的库存量
+        // skuNum = 20;
+        //如果输入的数字大于库存 用库存减当前商品数量 就是相当于看当前的商品数量还有多少到达20，结果永远为正，就让他加上之后为20，也就是库存数量
+        this.updateCartCount({ skuId, skuNum: 20 - skuNum });
+        return;
+      }
+      //console.log(skuId, skuNum, e.target.value); e.target.value 得到的值为字符串
+      // 如果输入的值和原本的值相等就不处理
+      if (+e.target.value === skuNum) {
+        return;
+      }
+      // 当前商品数量是10 e.target.value 6 -->  6 - 10 = -4
+      // 当前商品数量是3 e.target.value 6 --> 6 - 3 = 3
+      this.updateCartCount({ skuId, skuNum: e.target.value - skuNum });
+    },
     // 更新商品数量
     async updateCount(skuId, skuNum) {
       // 更新商品
-      await this.updateCartCount({ skuId, skuNum});
+      await this.updateCartCount({ skuId, skuNum });
       // 刷新页面
       //this.getShopCartList(); // 2. 重新请求所有购物车数据(改变商品数量之后，更新页面方式二)
     },
@@ -313,7 +326,7 @@ export default {
           input {
             border: 1px solid #ddd;
             width: 40px;
-            height: 33px;
+            height: 31px;
             float: left;
             text-align: center;
             font-size: 14px;

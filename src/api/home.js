@@ -30,12 +30,3 @@ export const reqGetFloors = () => {
     })
 }
 
-/**
- * 头部退出按钮事件
- */
-export const reqExit = () => {
-    return request({
-        method: "GET",
-        url: "/user/passport/logout"
-    })
-}

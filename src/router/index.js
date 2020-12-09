@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "../store"
 
 import Home from "../views/Home";
 import Login from "../views/Login";
@@ -39,13 +40,14 @@ VueRouter.prototype.replace = function (location, onComplete, onAbout) {
 // 安装插件
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
     routes: [
         {
             path: "/",
             component: Home
         },
         {
+            name: "login",
             path: "/login",
             component: Login,
             // 当组件加载显示时，meta中的参数会传到$route中
@@ -108,3 +110,16 @@ export default new VueRouter({
         return { x: 0, y: 0 };
     },
 })
+
+const checkList = ['/trade', '/pay', '/center'];
+/**
+ * @params to 要去的路由对象
+ * @params from 当前的的路由对象
+ * @params next 之后要去的路由
+ */
+router.beforeEach((to, from, next) => {
+    if (checkList.indexOf(to.path) > -1 && !store.state.user.token) next({ name: "login" });
+    else next();
+})
+
+export default router;
